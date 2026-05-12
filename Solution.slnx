@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DataType1/DataType1.csproj" />
+  <Project Path="DataType2/DataType2.csproj" />
+</Solution>
