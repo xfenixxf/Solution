@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using static OOP.Program;
+﻿using static OOP.Program;
 
 namespace OOP
 {
