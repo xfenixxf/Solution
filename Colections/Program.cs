@@ -224,8 +224,6 @@ namespace Colections
             Console.WriteLine($"До Pop: Count={stack6.Count}, Capacity={stack6.Capacity}");
             stack6.Pop();
             Console.WriteLine($"После Pop: Count={stack6.Count}, Capacity={stack6.Capacity}");
-
-            Console.ReadKey();
         }
     }
 }
