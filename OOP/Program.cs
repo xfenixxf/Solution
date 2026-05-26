@@ -1,18 +1,16 @@
-﻿using static OOP.Program;
-
-namespace OOP
+﻿namespace OOP
 {
     internal class Program
-    {   
+    {
         public class Product
-        {   
-            protected string product;
-            protected string producer;
-            protected double price;
-            protected DateTime expiration_date;
-            protected DateTime production_date;
+        {
+            protected string _product;
+            protected string _producer;
+            protected double _price;
+            protected DateTime _expirationDate;
+            protected DateTime _productionDate;
 
-            public Product (string product, string producer, double price, DateTime expiration_date, DateTime production_date)
+            public Product(string product, string producer, double price, DateTime expirationDate, DateTime productionDate)
             {
                 if (string.IsNullOrWhiteSpace(product))
                     throw new ArgumentException("Наименование не может быть пустым");
@@ -23,79 +21,91 @@ namespace OOP
                 if (price < 0)
                     throw new ArgumentException("Цена не может быть отрицательной");
 
-                if (production_date > DateTime.Now)
+                if (productionDate > DateTime.Now)
                     throw new ArgumentException("Дата производства не может быть в будущем");
 
-                if (expiration_date <= production_date)
+                if (expirationDate <= productionDate)
                     throw new ArgumentException("Срок годности должен быть позже даты производства");
-                this.product = product;
-                this.producer = producer;
-                this.price = price;
-                this.expiration_date = expiration_date;
-                this.production_date = production_date;
+
+                _product = product;
+                _producer = producer;
+                _price = price;
+                _expirationDate = expirationDate;
+                _productionDate = productionDate;
             }
 
             public virtual string ToString()
             {
-                return ($"Продукт: {product}, Производитель: {producer}, Цена: {price}, Срок годности: {expiration_date.ToShortDateString()}, Дата производства: {production_date.ToShortDateString()}");
+                return $"Продукт: {_product}, Производитель: {_producer}, Цена: {_price}, Срок годности: {_expirationDate.ToShortDateString()}, Дата производства: {_productionDate.ToShortDateString()}";
             }
-
         }
 
         public class DiscountedProduct : Product
         {
+            private int _discount;
+            private double _discountedPrice;
 
-            private int discount;
-            private double discounted_price;
-
-            public DiscountedProduct(string product, string producer, double price,DateTime expiration_date, DateTime production_date,int discount) :base(product, producer, price, expiration_date, production_date)
+            public DiscountedProduct(string product, string producer, double price, DateTime expirationDate, DateTime productionDate, int discount)
+                : base(product, producer, price, expirationDate, productionDate)
             {
-
                 if (discount < 0 || discount > 100)
-                    throw new ArgumentException("Скидка не может быть отрицательной или =>100%");
-                this.discount = discount;
-                this.discounted_price = price * (1 - discount / 100.0);
+                    throw new ArgumentException("Скидка должна быть от 0 до 100%");
+
+                _discount = discount;
+                _discountedPrice = price * (1 - discount / 100.0);
             }
+
             public override string ToString()
             {
-                return ($"Продукт: {product}, Производитель: {producer}, Цена: {discounted_price} со скидкой {discount}%, Срок годности: {expiration_date.ToShortDateString()}, Дата производства: {production_date.ToShortDateString()}");
+                return $"Продукт: {_product}, Производитель: {_producer}, Цена: {_discountedPrice:F2} со скидкой {_discount}%, Срок годности: {_expirationDate.ToShortDateString()}, Дата производства: {_productionDate.ToShortDateString()}";
             }
+
             public int Discount
             {
-                get { return discount; }
+                get { return _discount; }
                 set
                 {
                     if (value < 0 || value > 100)
                         throw new ArgumentException("Скидка должна быть от 0 до 100%");
-                    discount = value;
-                    discounted_price = price * (1 - discount / 100.0);
+                    _discount = value;
+                    _discountedPrice = _price * (1 - _discount / 100.0);
                 }
             }
+
             public double DiscountedPrice
             {
-                get { return discounted_price; }
+                get { return _discountedPrice; }
             }
         }
+
         static void Main(string[] args)
         {
-            Console.Write("Наименование: ");
-            string name = Console.ReadLine();
-            Console.Write("Производитель: ");
-            string producer = Console.ReadLine();
-            Console.Write("Цена: ");
-            double price = double.Parse(Console.ReadLine());
-            Console.Write("Дата производства (гггг-мм-дд): ");
-            DateTime production_date = DateTime.Parse(Console.ReadLine());
-            Console.Write("Срок годности (гггг-мм-дд): ");
-            DateTime expiration_date = DateTime.Parse(Console.ReadLine());
-            Console.Write("Скидка (%): ");
-            int discount = int.Parse(Console.ReadLine());
-            Product product = new Product(name, producer, price, expiration_date, production_date);
-            DiscountedProduct discounted = new DiscountedProduct(name, producer, price, expiration_date, production_date, discount);
+
+            string name = OutText("Наименование: ");
+            string producer = OutText("Производитель: ");
+            double price = double.Parse(OutText("Цена: "));
+            DateTime productionDate = DateTime.Parse(OutText("Дата производства (гггг-мм-дд): "));
+            DateTime expirationDate = DateTime.Parse(OutText("Срок годности (гггг-мм-дд): "));
+            int discount = int.Parse(OutText("Скидка (%): "));
+
+            Product product = new Product(name, producer, price, expirationDate, productionDate);
+            DiscountedProduct discounted = new DiscountedProduct(name, producer, price, expirationDate, productionDate, discount);
+
             Console.WriteLine("Обычный товар");
             Console.WriteLine(product.ToString());
             Console.WriteLine("Товар со скидкой");
             Console.WriteLine(discounted.ToString());
+
+        }
+        /// <summary>
+        /// Функция для вывода сообщения и считывания строки ввода
+        /// </summary>
+        /// <param name="Message">сообщение которое выводится</param>
+        /// <returns></returns>
+        public static string OutText(string message)
+        {
+            Console.Write(message);
+            return Console.ReadLine();
         }
     }
 }

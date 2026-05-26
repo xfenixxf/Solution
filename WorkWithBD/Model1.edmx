@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище bookshopModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "bookshop.dbo.BookCategory" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="BookCategory">
+          <Key>
+            <PropertyRef Name="ID_book" />
+            <PropertyRef Name="ID_category" />
+          </Key>
+          <Property Name="ID_book" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ID_category" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Books">
+          <Key>
+            <PropertyRef Name="ID_books" />
+          </Key>
+          <Property Name="ID_books" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Author" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Published_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID_category" />
+          </Key>
+          <Property Name="ID_category" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Category_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderBooks">
+          <Key>
+            <PropertyRef Name="ID_order_book" />
+          </Key>
+          <Property Name="ID_order_book" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ID_order" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ID_book" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Unit_price" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ID_orders" />
+          </Key>
+          <Property Name="ID_orders" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ID_user" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Order_date" Type="datetime" Nullable="false" />
+          <Property Name="Total_amount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Is_paid" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID_user" />
+          </Key>
+          <Property Name="ID_user" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Full_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Book_category_Books">
+          <End Role="Books" Type="Self.Books" Multiplicity="1" />
+          <End Role="BookCategory" Type="Self.BookCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Books">
+              <PropertyRef Name="ID_books" />
+            </Principal>
+            <Dependent Role="BookCategory">
+              <PropertyRef Name="ID_book" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Book_category_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="BookCategory" Type="Self.BookCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID_category" />
+            </Principal>
+            <Dependent Role="BookCategory">
+              <PropertyRef Name="ID_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_books_Books">
+          <End Role="Books" Type="Self.Books" Multiplicity="1" />
+          <End Role="OrderBooks" Type="Self.OrderBooks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Books">
+              <PropertyRef Name="ID_books" />
+            </Principal>
+            <Dependent Role="OrderBooks">
+              <PropertyRef Name="ID_book" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_books_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderBooks" Type="Self.OrderBooks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID_orders" />
+            </Principal>
+            <Dependent Role="OrderBooks">
+              <PropertyRef Name="ID_order" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище bookshopModelContainer">
+          <EntitySet Name="Books" EntityType="Self.Books" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderBooks" EntityType="Self.OrderBooks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookCategory" EntityType="Self.BookCategory" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BookCategory].[ID_book] AS [ID_book], 
+    [BookCategory].[ID_category] AS [ID_category]
+    FROM [dbo].[BookCategory] AS [BookCategory]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Book_category_Books" Association="Self.FK_Book_category_Books">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="BookCategory" EntitySet="BookCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Book_category_Category" Association="Self.FK_Book_category_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="BookCategory" EntitySet="BookCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_books_Books" Association="Self.FK_Order_books_Books">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="OrderBooks" EntitySet="OrderBooks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_books_Orders" Association="Self.FK_Order_books_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderBooks" EntitySet="OrderBooks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bookshopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Books">
+          <Key>
+            <PropertyRef Name="ID_books" />
+          </Key>
+          <Property Name="ID_books" Type="Guid" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Published_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OrderBooks" Relationship="Self.FK_Order_books_Books" FromRole="Books" ToRole="OrderBooks" />
+          <NavigationProperty Name="Category" Relationship="Self.BookCategory" FromRole="Books" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID_category" />
+          </Key>
+          <Property Name="ID_category" Type="Guid" Nullable="false" />
+          <Property Name="Category_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Books" Relationship="Self.BookCategory" FromRole="Category" ToRole="Books" />
+        </EntityType>
+        <EntityType Name="OrderBooks">
+          <Key>
+            <PropertyRef Name="ID_order_book" />
+          </Key>
+          <Property Name="ID_order_book" Type="Guid" Nullable="false" />
+          <Property Name="ID_order" Type="Guid" Nullable="false" />
+          <Property Name="ID_book" Type="Guid" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Unit_price" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Books" Relationship="Self.FK_Order_books_Books" FromRole="OrderBooks" ToRole="Books" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Order_books_Orders" FromRole="OrderBooks" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ID_orders" />
+          </Key>
+          <Property Name="ID_orders" Type="Guid" Nullable="false" />
+          <Property Name="ID_user" Type="Guid" Nullable="false" />
+          <Property Name="Order_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Total_amount" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Is_paid" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OrderBooks" Relationship="Self.FK_Order_books_Orders" FromRole="Orders" ToRole="OrderBooks" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID_user" />
+          </Key>
+          <Property Name="ID_user" Type="Guid" Nullable="false" />
+          <Property Name="Full_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_Order_books_Books">
+          <End Role="Books" Type="Self.Books" Multiplicity="1" />
+          <End Role="OrderBooks" Type="Self.OrderBooks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Books">
+              <PropertyRef Name="ID_books" />
+            </Principal>
+            <Dependent Role="OrderBooks">
+              <PropertyRef Name="ID_book" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_books_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderBooks" Type="Self.OrderBooks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID_orders" />
+            </Principal>
+            <Dependent Role="OrderBooks">
+              <PropertyRef Name="ID_order" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BookCategory">
+          <End Role="Books" Type="Self.Books" Multiplicity="*" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="bookshopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Books" EntityType="Self.Books" />
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="OrderBooks" EntityType="Self.OrderBooks" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Order_books_Books" Association="Self.FK_Order_books_Books">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="OrderBooks" EntitySet="OrderBooks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_books_Orders" Association="Self.FK_Order_books_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderBooks" EntitySet="OrderBooks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="BookCategory" Association="Self.BookCategory">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="Category" EntitySet="Category" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище bookshopModelContainer" CdmEntityContainer="bookshopEntities">
+          <EntitySetMapping Name="Books">
+            <EntityTypeMapping TypeName="bookshopModel.Books">
+              <MappingFragment StoreEntitySet="Books">
+                <ScalarProperty Name="ID_books" ColumnName="ID_books" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Published_date" ColumnName="Published_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="bookshopModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ID_category" ColumnName="ID_category" />
+                <ScalarProperty Name="Category_name" ColumnName="Category_name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderBooks">
+            <EntityTypeMapping TypeName="bookshopModel.OrderBooks">
+              <MappingFragment StoreEntitySet="OrderBooks">
+                <ScalarProperty Name="ID_order_book" ColumnName="ID_order_book" />
+                <ScalarProperty Name="ID_order" ColumnName="ID_order" />
+                <ScalarProperty Name="ID_book" ColumnName="ID_book" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="bookshopModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="ID_orders" ColumnName="ID_orders" />
+                <ScalarProperty Name="ID_user" ColumnName="ID_user" />
+                <ScalarProperty Name="Order_date" ColumnName="Order_date" />
+                <ScalarProperty Name="Total_amount" ColumnName="Total_amount" />
+                <ScalarProperty Name="Is_paid" ColumnName="Is_paid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="bookshopModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID_user" ColumnName="ID_user" />
+                <ScalarProperty Name="Full_name" ColumnName="Full_name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="BookCategory" TypeName="bookshopModel.BookCategory" StoreEntitySet="BookCategory">
+            <EndProperty Name="Books">
+              <ScalarProperty Name="ID_books" ColumnName="ID_book" />
+            </EndProperty>
+            <EndProperty Name="Category">
+              <ScalarProperty Name="ID_category" ColumnName="ID_category" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

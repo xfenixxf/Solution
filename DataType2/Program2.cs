@@ -2,6 +2,10 @@
 {
     internal class Program2
     {
+        /// <summary>
+        /// Функция для вывода Diamond
+        /// </summary>
+        /// <param name="x">размер Diamond</param>
         public static void PrintDiamond(int x)
         {
             if (x % 2 == 0)

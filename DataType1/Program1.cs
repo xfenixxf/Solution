@@ -1,44 +1,74 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DateType1
 {
     internal class Program1
     {
         /// <summary>
-        /// функция для расчёта сложных процентов по годам
+        /// Функция для расчёта сложных процентов по годам
         /// </summary>
-        /// <param name="initial_deposit"> Начальный депозит</param>
-        /// <param name="years">года</param>
-        /// <param name="interest_rate">процент ставки</param>
-        /// <returns></returns>
-        public static string CalculatePercent(double initial_deposit, int years, int interest_rate)
+        /// <param name="InitialDeposit">Начальный депозит</param>
+        /// <param name="Years">Количество лет</param>
+        /// <param name="InterestRate">Процентная ставка</param>
+        /// <returns>Список значений по годам</returns>
+        public static List<double> CalculatePercent(double InitialDeposit, int Years, int InterestRate)
         {
-            string resultString = "";
-            for (int i = 0; i < years; i++)
-            {
-                initial_deposit = initial_deposit + ((initial_deposit * interest_rate) / 100);
-                resultString = resultString + $"Год{i + 1}: {initial_deposit:F2} руб.\n";
+            List<double> Results = new List<double>();
+            double CurrentDeposit = InitialDeposit;
 
+            for (int i = 0; i < Years; i++)
+            {
+                CurrentDeposit = CurrentDeposit + ((CurrentDeposit * InterestRate) / 100);
+                Results.Add(CurrentDeposit);
             }
-            return resultString;
+
+            return Results;
         }
 
         static void Main(string[] args)
         {
-            double initial_deposit = 0;
-            int years = 0;
-            int interest_rate = 0;
-            Console.WriteLine($"начальный вклад");
-            initial_deposit = Convert.ToDouble(Console.ReadLine());
-            if (initial_deposit < 0) { Console.WriteLine($"неверное число"); return; }
-            Console.WriteLine($"количество лет");
-            years = Convert.ToInt32(Console.ReadLine());
-            if (years < 0) { Console.WriteLine($"неверное число"); return; }
-            Console.WriteLine($"годовая процентная ставка");
-            interest_rate = Convert.ToInt32(Console.ReadLine());
-            if (interest_rate < 0) { Console.WriteLine($"неверное число"); return; }
-            Console.WriteLine(CalculatePercent(initial_deposit, years, interest_rate));
+            double InitialDeposit = 0;
+            int Years = 0;
+            int InterestRate = 0;
 
+            InitialDeposit = Convert.ToDouble(OutText("Введите начальный вклад"));
+            if (InitialDeposit < 0)
+            {
+                Console.WriteLine("Неверное число");
+                return;
+            }
+
+            Years = Convert.ToInt32(OutText("Введите количество лет"));
+            if (Years < 0)
+            {
+                Console.WriteLine("Неверное число");
+                return;
+            }
+
+            InterestRate = Convert.ToInt32(OutText("Введите годовую процентную ставку"));
+            if (InterestRate < 0)
+            {
+                Console.WriteLine("Неверное число");
+                return;
+            }
+
+            List<double> Results = CalculatePercent(InitialDeposit, Years, InterestRate);
+
+            for (int i = 0; i < Results.Count; i++)
+            {
+                Console.WriteLine($"Год{i + 1}: {Results[i]:F2} руб.");
+            }
+        }
+        /// <summary>
+        /// Функция для вывода сообщения и считывания строки ввода
+        /// </summary>
+        /// <param name="Message">сообщение которое выводится</param>
+        /// <returns></returns>
+        public static string OutText(string Message)
+        {
+            Console.WriteLine(Message);
+            return Console.ReadLine();
         }
     }
 }
