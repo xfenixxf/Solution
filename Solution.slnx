@@ -1,5 +1,8 @@
 <Solution>
+  <Project Path="API_Task/API_Task.csproj" Id="5e9ac04e-c8cc-422d-aaa8-2e6f8c0fabd8" />
   <Project Path="Colections/Colections.csproj" Id="c716e40d-726a-467e-a05c-8731f5fce7eb" />
+  <Project Path="Console_API_Task/Console_API_Task.csproj" Id="220a8593-16ff-4bbe-8b71-5209f85d46ac" />
+  <Project Path="Console_API_Task2/Console_API_Task2.csproj" Id="a4f0011e-d5ce-4213-8c0c-49f2e24f0acc" />
   <Project Path="DataType1/DataType1.csproj" />
   <Project Path="DataType2/DataType2.csproj" />
   <Project Path="OOP/OOP.csproj" Id="74f40e4a-92c8-43b6-affb-270a1c4e2288" />
